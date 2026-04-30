@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aktivita hliadky</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f4f2ee; --surface: #ffffff; --surface2: #edeae3;
+      --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.16);
+      --text: #1a1814; --muted: #7a746a;
+      --accent: #1d5fa8; --accent-light: #e8f0fb; --accent-dark: #0c3d6e;
+      --green: #2d6a4f; --green-light: #d8f0e6;
+      --red: #c0392b; --red-light: #fde8e6;
+      --amber: #b45309; --amber-light: #fef3cd;
+      --radius: 10px; --radius-lg: 14px;
+      --nav-h: 62px;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: var(--nav-h); }
+
+    /* TOPBAR */
+    .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.25rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+    .topbar-title { font-size: 17px; font-weight: 600; }
+    .home-btn { width: 32px; height: 32px; border-radius: 8px; border: .5px solid var(--border-strong); background: var(--surface2); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; text-decoration: none; flex-shrink: 0; }
+    .home-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .status-pill { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); background: var(--surface2); border-radius: 20px; padding: 4px 10px; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; transition: background 0.3s; }
+    .dot.on { background: #3da45a; }
+
+    /* BOTTOM NAV */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h); background: var(--surface); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 30; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 6px 0; flex: 1; }
+    .nav-item.active .nav-icon { color: var(--accent); }
+    .nav-item.active .nav-label { color: var(--accent); font-weight: 600; }
+    .nav-icon { font-size: 20px; color: var(--muted); }
+    .nav-label { font-size: 11px; color: var(--muted); }
+
+    /* MAIN */
+    .main { max-width: 600px; margin: 0 auto; padding: 1rem; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* SECTION TITLE */
+    .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 1.25rem 0 8px; }
+    .section-title:first-child { margin-top: 0; }
+
+    /* CARD */
+    .card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 16px; margin-bottom: 10px; }
+
+    /* START SHIFT FORM */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+    .form-field { height: 40px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; width: 100%; }
+    .form-field:focus { border-color: var(--accent); }
+    select.form-field { -webkit-appearance: none; appearance: none; }
+    .btn-primary { width: 100%; height: 44px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .btn-primary:hover { background: var(--accent-dark); }
+    .btn-danger { width: 100%; height: 44px; background: none; color: var(--red); border: 1px solid rgba(192,57,43,0.3); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; }
+    .btn-danger:hover { background: var(--red-light); }
+
+    /* ACTIVE SHIFT HEADER */
+    .shift-header { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+    .shift-chip { width: 46px; height: 46px; border-radius: 10px; background: var(--green-light); color: var(--green); font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .shift-info { flex: 1; }
+    .shift-name { font-size: 15px; font-weight: 600; }
+    .shift-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .shift-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--green-light); color: var(--green); flex-shrink: 0; }
+
+    /* ACTIVITY COUNTER GRID */
+    .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .activity-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
+    .activity-icon { font-size: 22px; }
+    .activity-label { font-size: 12px; font-weight: 500; color: var(--muted); text-align: center; line-height: 1.3; }
+    .activity-count { font-size: 38px; font-weight: 700; line-height: 1; color: var(--text); }
+    .activity-count.nonzero { color: var(--accent); }
+    .counter-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .btn-minus { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(192,57,43,0.3); background: none; color: var(--red); font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; line-height: 1; }
+    .btn-minus:hover { background: var(--red-light); }
+    .btn-minus:disabled { opacity: 0.3; cursor: default; }
+    .btn-plus { width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 22px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; line-height: 1; box-shadow: 0 2px 8px rgba(29,95,168,0.25); }
+    .btn-plus:hover { background: var(--accent-dark); }
+    .btn-plus:active { transform: scale(0.94); }
+
+    /* HISTORY */
+    .hist-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); margin-bottom: 10px; overflow: hidden; }
+    .hist-header { display: flex; align-items: center; gap: 12px; padding: 13px 15px; cursor: pointer; }
+    .hist-header:hover { background: #fafaf8; }
+    .hist-chip { width: 42px; height: 42px; border-radius: 10px; background: var(--surface2); color: var(--muted); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .hist-info { flex: 1; min-width: 0; }
+    .hist-title { font-size: 15px; font-weight: 500; }
+    .hist-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .hist-total { font-size: 13px; font-weight: 600; color: var(--accent); flex-shrink: 0; }
+    .hist-body { border-top: .5px solid var(--border); display: none; padding: 12px 15px; }
+    .hist-body.open { display: block; }
+    .hist-counts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .hist-count-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: .5px solid var(--border); }
+    .hist-count-row:nth-last-child(-n+2) { border-bottom: none; }
+    .hist-count-icon { font-size: 16px; flex-shrink: 0; }
+    .hist-count-label { font-size: 12px; color: var(--muted); flex: 1; }
+    .hist-count-val { font-size: 14px; font-weight: 600; color: var(--text); }
+    .hist-count-val.nz { color: var(--accent); }
+
+    /* DATE FILTER */
+    .date-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
+    .date-row input[type="date"] { flex: 1; height: 38px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; appearance: none; }
+    .date-row input:focus { border-color: var(--accent); }
+    .today-btn { height: 38px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+    .today-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* STATS */
+    .kpi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 12px; }
+    .kpi-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px; text-align: center; }
+    .kpi-num { font-size: 26px; font-weight: 700; line-height: 1; color: var(--accent); }
+    .kpi-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .stat-bar-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 16px; margin-bottom: 10px; }
+    .stat-bar-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 12px; }
+    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .bar-row:last-child { margin-bottom: 0; }
+    .bar-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+    .bar-label { font-size: 13px; min-width: 130px; flex-shrink: 0; }
+    .bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width .5s; }
+    .bar-count { font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; color: var(--text); }
+    .period-row { display: flex; gap: 6px; margin-bottom: 12px; }
+    .period-btn { height: 30px; padding: 0 14px; border-radius: 20px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--muted); cursor: pointer; transition: all .15s; }
+    .period-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* EMPTY */
+    .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 400px) {
+      .activity-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .activity-count { font-size: 32px; }
+      .btn-plus { width: 40px; height: 40px; font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-icon">📊</div>
+    <span class="topbar-title">Aktivita hliadky</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div class="status-pill"><div class="dot" id="status-dot"></div><span id="status-text">...</span></div>
+    <a href="https://msprk.github.io/" class="home-btn" title="Domov">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="main">
+  <!-- HLIADKA TAB -->
+  <div class="tab-panel active" id="tab-hliadka">
+    <div id="hliadka-content"></div>
+  </div>
+
+  <!-- HISTORIA TAB -->
+  <div class="tab-panel" id="tab-historia">
+    <div class="date-row">
+      <input type="date" id="hist-date" oninput="renderHistoria()" />
+      <button class="today-btn" onclick="resetHistDate()">Dnes</button>
+    </div>
+    <div id="historia-list"></div>
+  </div>
+
+  <!-- STATISTIKY TAB -->
+  <div class="tab-panel" id="tab-stats">
+    <div class="period-row">
+      <button class="period-btn active" data-period="week" onclick="setPeriod('week')">Týždeň</button>
+      <button class="period-btn" data-period="month" onclick="setPeriod('month')">Mesiac</button>
+      <button class="period-btn" data-period="all" onclick="setPeriod('all')">Všetko</button>
+    </div>
+    <div id="stats-content"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active" id="nav-hliadka" onclick="switchTab('hliadka')">
+    <div class="nav-icon">📋</div>
+    <div class="nav-label">Hliadka</div>
+  </div>
+  <div class="nav-item" id="nav-historia" onclick="switchTab('historia')">
+    <div class="nav-icon">🗂️</div>
+    <div class="nav-label">História</div>
+  </div>
+  <div class="nav-item" id="nav-stats" onclick="switchTab('stats')">
+    <div class="nav-icon">📈</div>
+    <div class="nav-label">Štatistiky</div>
+  </div>
+</nav>
+
+<script type="module">
+  import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, onValue, push, update, remove, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getAuth, onAuthStateChanged }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDOYPIXjbW3mrFpospLjTbt6ui4I318sg8",
+    authDomain:        "msprk-app.firebaseapp.com",
+    databaseURL:       "https://msprk-app-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId:         "msprk-app",
+    storageBucket:     "msprk-app.firebasestorage.app",
+    messagingSenderId: "544350754193",
+    appId:             "1:544350754193:web:acb050a43126437790f630"
+  };
+
+  // ── AUTH GUARD ──
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  onAuthStateChanged(auth, user => {
+    if (!user) window.location.href = "https://msprk.github.io/";
+  });
+  // ────────────────
+
+  const db     = getDatabase(app);
+  const svcRef = ref(db, "aktivity/sluzby");
+
+  // ── ACTIVITY TYPES ──
+  const ACTIVITIES = [
+    { id: "preverenie",   label: "Preverenie osoby",    icon: "🔍" },
+    { id: "pomoc",        label: "Pomoc občanovi",       icon: "🤝" },
+    { id: "telefon159",   label: "Telefonát 159",        icon: "📞" },
+    { id: "predvedenie",  label: "Predvedenie osoby",    icon: "👮" },
+    { id: "pokuta",       label: "Bloková pokuta",        icon: "📋" },
+    { id: "priestupok",   label: "Priestupkové konanie", icon: "⚖️" },
+    { id: "hliadkovanie", label: "Hliadkovanie",         icon: "🚶" },
+    { id: "ine",          label: "Iné",                  icon: "📌" },
+  ];
+
+  const WORKERS = Array.from({length:39},(_,i)=>(i+1).toString().padStart(3,"0"));
+  let allServices = {}, statPeriod = "week";
+
+  function setStatus(on) {
+    document.getElementById("status-dot").className = "dot"+(on?" on":"");
+    document.getElementById("status-text").textContent = on ? "Online" : "Offline";
+  }
+
+  onValue(svcRef, snap => {
+    allServices = snap.val() || {};
+    setStatus(true);
+    renderHliadka();
+    renderHistoria();
+    renderStats();
+  }, () => setStatus(false));
+
+  // ── HELPERS ──
+  function totalCounts(counts) {
+    return ACTIVITIES.reduce((s,a) => s + (counts?.[a.id]||0), 0);
+  }
+  function getActive() {
+    return Object.entries(allServices).map(([id,v])=>({id,...v})).find(s=>s.status==="active");
+  }
+  function todayStr() { return new Date().toISOString().split("T")[0]; }
+  function nowTime()  { return new Date().toTimeString().slice(0,5); }
+  function fmtWorker(w) { return w ? `Hliadkar ${w}` : "—"; }
+
+  // ── TAB SWITCH ──
+  window.switchTab = function(tab) {
+    ["hliadka","historia","stats"].forEach(t => {
+      document.getElementById("tab-"+t).classList.toggle("active", t===tab);
+      document.getElementById("nav-"+t).classList.toggle("active", t===tab);
+    });
+    if (tab==="stats") renderStats();
+  };
+
+  // ── RENDER HLIADKA ──
+  function renderHliadka() {
+    const active = getActive();
+    const el = document.getElementById("hliadka-content");
+
+    if (!active) {
+      el.innerHTML = `
+        <div class="card">
+          <div style="font-size:15px;font-weight:600;margin-bottom:14px">Začať novú hliadku</div>
+          <div class="form-row">
+            <div class="form-group">
+              <span class="form-label">Dátum</span>
+              <input class="form-field" type="date" id="f-date" value="${todayStr()}"/>
+            </div>
+            <div class="form-group">
+              <span class="form-label">Čas začiatku</span>
+              <input class="form-field" type="time" id="f-start" value="${nowTime()}"/>
+            </div>
+            <div class="form-group">
+              <span class="form-label">Hliadkar</span>
+              <select class="form-field" id="f-worker">
+                <option value="">— Vybrať —</option>
+                ${WORKERS.map(w=>`<option value="${w}">${w}</option>`).join("")}
+              </select>
+            </div>
+            <div class="form-group">
+              <span class="form-label">Hliadka</span>
+              <select class="form-field" id="f-shift">
+                <option value="">— Vybrať —</option>
+                ${["A","B","C","D"].map(s=>`<option value="${s}">${s}</option>`).join("")}
+              </select>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="startShift()">▶ Začať hliadku</button>
+        </div>
+      `;
+      return;
+    }
+
+    const counts = active.counts || {};
+    el.innerHTML = `
+      <div class="shift-header">
+        <div class="shift-chip">${active.shift||"?"}</div>
+        <div class="shift-info">
+          <div class="shift-name">${fmtWorker(active.worker)}</div>
+          <div class="shift-meta">${active.date||""} · od ${active.startTime||""}</div>
+        </div>
+        <div class="shift-badge">● Aktívna</div>
+      </div>
+      <div class="activity-grid">
+        ${ACTIVITIES.map(a => {
+          const cnt = counts[a.id]||0;
+          return `
+          <div class="activity-card">
+            <div class="activity-icon">${a.icon}</div>
+            <div class="activity-label">${a.label}</div>
+            <div class="activity-count${cnt>0?" nonzero":""}" id="cnt-${a.id}">${cnt}</div>
+            <div class="counter-row">
+              <button class="btn-minus" onclick="decActivity('${active.id}','${a.id}')" ${cnt===0?"disabled":""} id="minus-${a.id}">−</button>
+              <button class="btn-plus"  onclick="incActivity('${active.id}','${a.id}')">+</button>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 2px">
+        <span style="font-size:13px;color:var(--muted)">Celkom zaznamenaných aktivít</span>
+        <span style="font-size:18px;font-weight:700;color:var(--accent)">${totalCounts(counts)}</span>
+      </div>
+      <button class="btn-danger" onclick="endShift('${active.id}')">■ Ukončiť hliadku</button>
+    `;
+  }
+
+  window.startShift = function() {
+    const date    = document.getElementById("f-date")?.value;
+    const start   = document.getElementById("f-start")?.value;
+    const worker  = document.getElementById("f-worker")?.value;
+    const shift   = document.getElementById("f-shift")?.value;
+    if (!date)   { alert("Vyplňte dátum."); return; }
+    if (!worker) { alert("Vyberte hliadkara."); return; }
+    if (!shift)  { alert("Vyberte hliadku."); return; }
+    const counts = {};
+    ACTIVITIES.forEach(a => counts[a.id] = 0);
+    push(svcRef, { date, startTime: start, worker, shift, status:"active", ts: Date.now(), counts });
+  };
+
+  window.endShift = function(id) {
+    if (!confirm("Ukončiť hliadku?")) return;
+    update(ref(db,"aktivity/sluzby/"+id), { status:"done", endTime: nowTime() });
+  };
+
+  window.incActivity = function(svcId, actId) {
+    update(ref(db, `aktivity/sluzby/${svcId}/counts`), { [actId]: increment(1) });
+  };
+
+  window.decActivity = function(svcId, actId) {
+    const active = getActive();
+    if (!active) return;
+    const cur = (active.counts||{})[actId]||0;
+    if (cur <= 0) return;
+    update(ref(db, `aktivity/sluzby/${svcId}/counts`), { [actId]: increment(-1) });
+  };
+
+  // ── RENDER HISTÓRIA ──
+  window.renderHistoria = function() {
+    const filterDate = document.getElementById("hist-date")?.value || "";
+    const entries = Object.entries(allServices)
+      .map(([id,v])=>({id,...v}))
+      .filter(s => s.status === "done")
+      .filter(s => !filterDate || s.date === filterDate)
+      .sort((a,b) => (b.ts||0)-(a.ts||0));
+
+    const el = document.getElementById("historia-list");
+    if (!entries.length) {
+      el.innerHTML = `<div class="empty">Žiadne ukončené hliadky${filterDate ? " pre vybraný dátum" : ""}.</div>`;
+      return;
+    }
+
+    el.innerHTML = entries.map(s => {
+      const counts = s.counts || {};
+      const total  = totalCounts(counts);
+      const isOpen = window._histOpenId === s.id;
+      return `
+      <div class="hist-card">
+        <div class="hist-header" onclick="toggleHist('${s.id}')">
+          <div class="hist-chip">${s.shift||"?"}</div>
+          <div class="hist-info">
+            <div class="hist-title">${fmtWorker(s.worker)} · Hliadka ${s.shift||"?"}</div>
+            <div class="hist-meta">${s.date||""} · ${s.startTime||""}${s.endTime?" – "+s.endTime:""}</div>
+          </div>
+          <div class="hist-total">${total} aktiv.</div>
+        </div>
+        <div class="hist-body${isOpen?" open":""}">
+          <div class="hist-counts">
+            ${ACTIVITIES.map(a => {
+              const v = counts[a.id]||0;
+              return `
+              <div class="hist-count-row">
+                <span class="hist-count-icon">${a.icon}</span>
+                <span class="hist-count-label">${a.label}</span>
+                <span class="hist-count-val${v>0?" nz":""}">${v}</span>
+              </div>`;
+            }).join("")}
+          </div>
+          <button onclick="deleteShift('${s.id}')" style="margin-top:10px;height:28px;padding:0 12px;background:none;border:.5px solid rgba(192,57,43,0.25);border-radius:6px;color:var(--red);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer">Vymazať hliadku</button>
+        </div>
+      </div>`;
+    }).join("");
+  };
+
+  window._histOpenId = null;
+  window.toggleHist = function(id) {
+    window._histOpenId = window._histOpenId === id ? null : id;
+    renderHistoria();
+  };
+
+  window.deleteShift = function(id) {
+    if (confirm("Vymazať túto hliadku?")) remove(ref(db,"aktivity/sluzby/"+id));
+  };
+
+  window.resetHistDate = function() {
+    document.getElementById("hist-date").value = todayStr();
+    renderHistoria();
+  };
+
+  // ── RENDER STATS ──
+  window.setPeriod = function(p) {
+    statPeriod = p;
+    document.querySelectorAll(".period-btn").forEach(b => b.classList.toggle("active", b.dataset.period===p));
+    renderStats();
+  };
+
+  window.renderStats = function() {
+    const now = new Date();
+    const cutoff = statPeriod === "week"  ? new Date(now - 7*86400000).toISOString().split("T")[0]
+                 : statPeriod === "month" ? new Date(now - 30*86400000).toISOString().split("T")[0]
+                 : "0000-00-00";
+
+    const entries = Object.values(allServices)
+      .filter(s => s.status === "done" && (s.date||"") >= cutoff);
+
+    const totalAct = {};
+    ACTIVITIES.forEach(a => totalAct[a.id] = 0);
+    entries.forEach(s => ACTIVITIES.forEach(a => totalAct[a.id] += (s.counts?.[a.id]||0)));
+
+    const grandTotal   = Object.values(totalAct).reduce((a,b)=>a+b, 0);
+    const maxVal       = Math.max(...Object.values(totalAct), 1);
+    const numShifts    = entries.length;
+    const avgPerShift  = numShifts ? (grandTotal/numShifts).toFixed(1) : "0";
+    const topActivity  = ACTIVITIES.reduce((best,a) => totalAct[a.id] > (totalAct[best?.id]||0) ? a : best, ACTIVITIES[0]);
+
+    const el = document.getElementById("stats-content");
+    el.innerHTML = `
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-num">${grandTotal}</div><div class="kpi-label">Aktivít celkom</div></div>
+        <div class="kpi-card"><div class="kpi-num">${numShifts}</div><div class="kpi-label">Hliadok</div></div>
+        <div class="kpi-card"><div class="kpi-num">${avgPerShift}</div><div class="kpi-label">Priemer / hliadka</div></div>
+      </div>
+      <div class="stat-bar-card">
+        <div class="stat-bar-title">Aktivita podľa typu</div>
+        ${ACTIVITIES.map(a => `
+          <div class="bar-row">
+            <span class="bar-icon">${a.icon}</span>
+            <span class="bar-label">${a.label}</span>
+            <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(totalAct[a.id]/maxVal*100)}%"></div></div>
+            <span class="bar-count">${totalAct[a.id]}</span>
+          </div>
+        `).join("")}
+      </div>
+      ${numShifts===0 ? `<div class="empty">Žiadne dáta za vybrané obdobie.</div>` : `
+      <div class="card" style="font-size:13px;color:var(--muted)">
+        Najčastejšia aktivita: <strong style="color:var(--text)">${topActivity.icon} ${topActivity.label}</strong> (${totalAct[topActivity.id]}×)
+      </div>`}
+    `;
+  };
+</script>
+</body>
+</html>
