@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aktivita hliadky</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -131,6 +132,8 @@
     .period-btn { height: 30px; padding: 0 14px; border-radius: 20px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--muted); cursor: pointer; transition: all .15s; }
     .period-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+    .chart-wrap { position: relative; height: 180px; margin-bottom: 4px; }
+
     /* EMPTY */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 14px; }
 
@@ -189,16 +192,16 @@
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <div class="nav-item active" id="nav-hliadka" onclick="switchTab('hliadka')">
-    <div class="nav-icon">📋</div>
-    <div class="nav-label">Hliadka</div>
+    <span class="nav-icon">📋</span>
+    <span class="nav-label">Hliadka</span>
   </div>
   <div class="nav-item" id="nav-historia" onclick="switchTab('historia')">
-    <div class="nav-icon">🗂️</div>
-    <div class="nav-label">História</div>
+    <span class="nav-icon">🗂️</span>
+    <span class="nav-label">Záznamy</span>
   </div>
   <div class="nav-item" id="nav-stats" onclick="switchTab('stats')">
-    <div class="nav-icon">📈</div>
-    <div class="nav-label">Štatistiky</div>
+    <span class="nav-icon">📊</span>
+    <span class="nav-label">Štatistiky</span>
   </div>
 </nav>
 
@@ -448,6 +451,8 @@
     renderStats();
   };
 
+  let statChart = null;
+
   window.renderStats = function() {
     const now = new Date();
     const cutoff = statPeriod === "week"  ? new Date(now - 7*86400000).toISOString().split("T")[0]
@@ -455,41 +460,96 @@
                  : "0000-00-00";
 
     const entries = Object.values(allServices)
-      .filter(s => s.status === "done" && (s.date||"") >= cutoff);
+      .filter(s => s.status === "done" && (s.date||"") >= cutoff)
+      .sort((a,b) => (a.date||"") > (b.date||"") ? 1 : -1);
 
     const totalAct = {};
     ACTIVITIES.forEach(a => totalAct[a.id] = 0);
     entries.forEach(s => ACTIVITIES.forEach(a => totalAct[a.id] += (s.counts?.[a.id]||0)));
 
-    const grandTotal   = Object.values(totalAct).reduce((a,b)=>a+b, 0);
-    const maxVal       = Math.max(...Object.values(totalAct), 1);
-    const numShifts    = entries.length;
-    const avgPerShift  = numShifts ? (grandTotal/numShifts).toFixed(1) : "0";
-    const topActivity  = ACTIVITIES.reduce((best,a) => totalAct[a.id] > (totalAct[best?.id]||0) ? a : best, ACTIVITIES[0]);
+    const grandTotal  = Object.values(totalAct).reduce((a,b)=>a+b, 0);
+    const numShifts   = entries.length;
+    const avgPerShift = numShifts ? Math.round(grandTotal/numShifts) : 0;
+    const topAct      = ACTIVITIES.reduce((best,a) => totalAct[a.id] > (totalAct[best.id]||0) ? a : best, ACTIVITIES[0]);
 
     const el = document.getElementById("stats-content");
+    if (!el) return;
+
     el.innerHTML = `
       <div class="kpi-grid">
         <div class="kpi-card"><div class="kpi-num">${grandTotal}</div><div class="kpi-label">Aktivít celkom</div></div>
         <div class="kpi-card"><div class="kpi-num">${numShifts}</div><div class="kpi-label">Hliadok</div></div>
         <div class="kpi-card"><div class="kpi-num">${avgPerShift}</div><div class="kpi-label">Priemer / hliadka</div></div>
       </div>
+
+      ${numShifts === 0 ? `<div class="empty">Žiadne dáta za vybrané obdobie.</div>` : `
       <div class="stat-bar-card">
         <div class="stat-bar-title">Aktivita podľa typu</div>
-        ${ACTIVITIES.map(a => `
+        <div class="chart-wrap"><canvas id="act-chart"></canvas></div>
+      </div>
+
+      <div class="stat-bar-card">
+        <div class="stat-bar-title">Prehľad typov</div>
+        ${ACTIVITIES.map(a => {
+          const maxV = Math.max(...Object.values(totalAct), 1);
+          const pct  = Math.round(totalAct[a.id]/maxV*100);
+          return `
           <div class="bar-row">
             <span class="bar-icon">${a.icon}</span>
             <span class="bar-label">${a.label}</span>
-            <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round(totalAct[a.id]/maxVal*100)}%"></div></div>
+            <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
             <span class="bar-count">${totalAct[a.id]}</span>
-          </div>
-        `).join("")}
+          </div>`;
+        }).join("")}
+        <div style="margin-top:12px;padding-top:10px;border-top:.5px solid var(--border);font-size:13px;color:var(--muted)">
+          Najčastejšia: <strong style="color:var(--text)">${topAct.icon} ${topAct.label}</strong> &nbsp;·&nbsp; ${totalAct[topAct.id]} záznamov
+        </div>
       </div>
-      ${numShifts===0 ? `<div class="empty">Žiadne dáta za vybrané obdobie.</div>` : `
-      <div class="card" style="font-size:13px;color:var(--muted)">
-        Najčastejšia aktivita: <strong style="color:var(--text)">${topActivity.icon} ${topActivity.label}</strong> (${totalAct[topActivity.id]}×)
+
+      <div class="stat-bar-card">
+        <div class="stat-bar-title">Prehľad hliadok (${numShifts})</div>
+        ${entries.slice().reverse().map(s => {
+          const tot = totalCounts(s.counts);
+          return `
+          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border)">
+            <div style="width:36px;height:36px;border-radius:8px;background:var(--surface2);color:var(--muted);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.shift||"?"}</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:500">Hliadka ${s.shift||"?"}</div>
+              <div style="font-size:12px;color:var(--muted)">${s.date||""} · ${s.startTime||""}${s.endTime?" – "+s.endTime:""}</div>
+            </div>
+            <div style="font-size:15px;font-weight:700;color:var(--accent)">${tot}</div>
+          </div>`;
+        }).join("")}
       </div>`}
     `;
+
+    if (numShifts > 0) {
+      if (statChart) { statChart.destroy(); statChart = null; }
+      const ctx = document.getElementById("act-chart");
+      if (ctx) {
+        statChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ACTIVITIES.map(a => a.label),
+            datasets: [{
+              data: ACTIVITIES.map(a => totalAct[a.id]),
+              backgroundColor: "rgba(29,95,168,0.18)",
+              borderColor: "rgba(29,95,168,0.7)",
+              borderWidth: 1.5,
+              borderRadius: 6,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { font: { family: "DM Sans", size: 11 }, color: "#7a746a", maxRotation: 30 } },
+              y: { grid: { color: "rgba(0,0,0,0.05)" }, ticks: { font: { family: "DM Sans", size: 11 }, color: "#7a746a", precision: 0 }, beginAtZero: true }
+            }
+          }
+        });
+      }
+    }
   };
 </script>
 </body>
