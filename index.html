@@ -248,13 +248,23 @@
     document.getElementById("status-text").textContent = on ? "Online" : "Offline";
   }
 
+  // Render immediately so UI isn't blank while Firebase connects
+  renderHliadka();
+  renderHistoria();
+  renderStats();
+
   onValue(svcRef, snap => {
     allServices = snap.val() || {};
     setStatus(true);
     renderHliadka();
     renderHistoria();
     renderStats();
-  }, () => setStatus(false));
+  }, () => {
+    setStatus(false);
+    renderHliadka();
+    renderHistoria();
+    renderStats();
+  });
 
   // ── HELPERS ──
   function totalCounts(counts) {
