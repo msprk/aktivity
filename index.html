@@ -248,22 +248,22 @@
     document.getElementById("status-text").textContent = on ? "Online" : "Offline";
   }
 
+  function renderAll() {
+    renderHliadka();
+    window.renderHistoria();
+    window.renderStats();
+  }
+
   // Render immediately so UI isn't blank while Firebase connects
   renderHliadka();
-  renderHistoria();
-  renderStats();
 
   onValue(svcRef, snap => {
     allServices = snap.val() || {};
     setStatus(true);
-    renderHliadka();
-    renderHistoria();
-    renderStats();
+    renderAll();
   }, () => {
     setStatus(false);
     renderHliadka();
-    renderHistoria();
-    renderStats();
   });
 
   // ── HELPERS ──
@@ -283,7 +283,7 @@
       document.getElementById("tab-"+t).classList.toggle("active", t===tab);
       document.getElementById("nav-"+t).classList.toggle("active", t===tab);
     });
-    if (tab==="stats") renderStats();
+    if (tab==="stats") window.renderStats();
   };
 
   // ── RENDER HLIADKA ──
