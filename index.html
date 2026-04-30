@@ -304,14 +304,7 @@
               <span class="form-label">Čas začiatku</span>
               <input class="form-field" type="time" id="f-start" value="${nowTime()}"/>
             </div>
-            <div class="form-group">
-              <span class="form-label">Hliadkar</span>
-              <select class="form-field" id="f-worker">
-                <option value="">— Vybrať —</option>
-                ${WORKERS.map(w=>`<option value="${w}">${w}</option>`).join("")}
-              </select>
-            </div>
-            <div class="form-group">
+            <div class="form-group full">
               <span class="form-label">Hliadka</span>
               <select class="form-field" id="f-shift">
                 <option value="">— Vybrať —</option>
@@ -319,7 +312,7 @@
               </select>
             </div>
           </div>
-          <button class="btn-primary" onclick="startShift()">▶ Začať hliadku</button>
+          <button class="btn-primary" onclick="startShift()">Začať hliadku</button>
         </div>
       `;
       return;
@@ -330,7 +323,7 @@
       <div class="shift-header">
         <div class="shift-chip">${active.shift||"?"}</div>
         <div class="shift-info">
-          <div class="shift-name">${fmtWorker(active.worker)}</div>
+          <div class="shift-name">Hliadka ${active.shift||"?"}</div>
           <div class="shift-meta">${active.date||""} · od ${active.startTime||""}</div>
         </div>
         <div class="shift-badge">● Aktívna</div>
@@ -359,16 +352,14 @@
   }
 
   window.startShift = function() {
-    const date    = document.getElementById("f-date")?.value;
-    const start   = document.getElementById("f-start")?.value;
-    const worker  = document.getElementById("f-worker")?.value;
-    const shift   = document.getElementById("f-shift")?.value;
-    if (!date)   { alert("Vyplňte dátum."); return; }
-    if (!worker) { alert("Vyberte hliadkara."); return; }
-    if (!shift)  { alert("Vyberte hliadku."); return; }
+    const date  = document.getElementById("f-date")?.value;
+    const start = document.getElementById("f-start")?.value;
+    const shift = document.getElementById("f-shift")?.value;
+    if (!date)  { alert("Vyplňte dátum."); return; }
+    if (!shift) { alert("Vyberte hliadku."); return; }
     const counts = {};
     ACTIVITIES.forEach(a => counts[a.id] = 0);
-    push(svcRef, { date, startTime: start, worker, shift, status:"active", ts: Date.now(), counts });
+    push(svcRef, { date, startTime: start, shift, status:"active", ts: Date.now(), counts });
   };
 
   window.endShift = function(id) {
@@ -412,7 +403,7 @@
         <div class="hist-header" onclick="toggleHist('${s.id}')">
           <div class="hist-chip">${s.shift||"?"}</div>
           <div class="hist-info">
-            <div class="hist-title">${fmtWorker(s.worker)} · Hliadka ${s.shift||"?"}</div>
+            <div class="hist-title">Hliadka ${s.shift||"?"}</div>
             <div class="hist-meta">${s.date||""} · ${s.startTime||""}${s.endTime?" – "+s.endTime:""}</div>
           </div>
           <div class="hist-total">${total} aktiv.</div>
