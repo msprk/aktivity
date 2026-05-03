@@ -9,19 +9,17 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f4f2ee; --surface: #ffffff; --surface2: #edeae3;
+      --bg: #f4f2ee; --surface: #fff; --surface2: #edeae3;
       --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.16);
       --text: #1a1814; --muted: #7a746a;
       --accent: #1d5fa8; --accent-light: #e8f0fb; --accent-dark: #0c3d6e;
       --green: #2d6a4f; --green-light: #d8f0e6;
       --red: #c0392b; --red-light: #fde8e6;
-      --amber: #b45309; --amber-light: #fef3cd;
-      --radius: 10px; --radius-lg: 14px;
-      --nav-h: 62px;
+      --amber: #b45309;
+      --radius: 10px; --radius-lg: 14px; --nav-h: 62px;
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: var(--nav-h); }
 
-    /* TOPBAR */
     .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.25rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
     .topbar-left { display: flex; align-items: center; gap: 10px; }
     .topbar-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
@@ -32,7 +30,6 @@
     .dot { width: 7px; height: 7px; border-radius: 50%; background: #ccc; transition: background 0.3s; }
     .dot.on { background: #3da45a; }
 
-    /* BOTTOM NAV */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: var(--nav-h); background: var(--surface); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 30; }
     .nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 6px 0; flex: 1; }
     .nav-item.active .nav-icon { color: var(--accent); }
@@ -40,78 +37,80 @@
     .nav-icon { font-size: 20px; color: var(--muted); }
     .nav-label { font-size: 11px; color: var(--muted); }
 
-    /* MAIN */
     .main { max-width: 600px; margin: 0 auto; padding: 1rem; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
-    /* SECTION TITLE */
-    .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 1.25rem 0 8px; }
-    .section-title:first-child { margin-top: 0; }
-
-    /* CARD */
+    /* FORM */
     .card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 16px; margin-bottom: 10px; }
-
-    /* START SHIFT FORM */
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-group.full { grid-column: 1 / -1; }
+    .form-group.full { grid-column: 1/-1; }
     .form-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
     .form-field { height: 40px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; width: 100%; }
     .form-field:focus { border-color: var(--accent); }
     select.form-field { -webkit-appearance: none; appearance: none; }
-    .btn-primary { width: 100%; height: 44px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .15s; }
+    .btn-primary { width: 100%; height: 46px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .15s; }
     .btn-primary:hover { background: var(--accent-dark); }
-    .btn-danger { width: 100%; height: 44px; background: none; color: var(--red); border: 1px solid rgba(192,57,43,0.3); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all .15s; }
-    .btn-danger:hover { background: var(--red-light); }
+    .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
 
-    /* ACTIVE SHIFT HEADER */
-    .shift-header { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
-    .shift-chip { width: 46px; height: 46px; border-radius: 10px; background: var(--green-light); color: var(--green); font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .shift-info { flex: 1; }
-    .shift-name { font-size: 15px; font-weight: 600; }
-    .shift-meta { font-size: 13px; color: var(--muted); margin-top: 2px; }
-    .shift-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; background: var(--green-light); color: var(--green); flex-shrink: 0; }
+    /* ADD WORKER ROW */
+    .add-worker-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .add-worker-row select { flex: 1; height: 40px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; appearance: none; }
+    .btn-add { height: 40px; padding: 0 16px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 
-    /* ACTIVITY COUNTER GRID */
-    .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-    .activity-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; }
-    .activity-icon { font-size: 22px; }
-    .activity-label { font-size: 12px; font-weight: 500; color: var(--muted); text-align: center; line-height: 1.3; }
-    .activity-count { font-size: 38px; font-weight: 700; line-height: 1; color: var(--text); }
-    .activity-count.nonzero { color: var(--accent); }
-    .counter-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-    .btn-minus { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid rgba(192,57,43,0.3); background: none; color: var(--red); font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; line-height: 1; }
+    /* WORKER CARD */
+    .worker-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); margin-bottom: 10px; overflow: hidden; }
+    .worker-card-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: .5px solid var(--border); background: var(--surface2); }
+    .worker-chip { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-light); color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .worker-chip-label { font-size: 14px; font-weight: 600; flex: 1; }
+    .worker-total { font-size: 13px; font-weight: 600; color: var(--accent); }
+    .btn-remove-worker { width: 28px; height: 28px; border-radius: 6px; border: .5px solid rgba(192,57,43,0.25); background: none; color: var(--red); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    /* ACTIVITY ROWS */
+    .act-row { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: .5px solid var(--border); }
+    .act-row:last-child { border-bottom: none; }
+    .act-icon { font-size: 16px; flex-shrink: 0; }
+    .act-label { font-size: 13px; flex: 1; color: var(--text); }
+    .act-counter { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .btn-minus { width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid rgba(192,57,43,0.25); background: none; color: var(--red); font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; line-height: 1; }
     .btn-minus:hover { background: var(--red-light); }
-    .btn-minus:disabled { opacity: 0.3; cursor: default; }
-    .btn-plus { width: 44px; height: 44px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 22px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; line-height: 1; box-shadow: 0 2px 8px rgba(29,95,168,0.25); }
+    .btn-minus:disabled { opacity: 0.25; cursor: default; }
+    .act-num { width: 36px; text-align: center; font-size: 16px; font-weight: 700; color: var(--text); }
+    .act-num.nz { color: var(--accent); }
+    .btn-plus { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--accent); color: #fff; font-size: 18px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; line-height: 1; box-shadow: 0 2px 6px rgba(29,95,168,0.2); }
     .btn-plus:hover { background: var(--accent-dark); }
-    .btn-plus:active { transform: scale(0.94); }
+    .btn-plus:active { transform: scale(.93); }
 
-    /* HISTORY */
-    .hist-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); margin-bottom: 10px; overflow: hidden; }
-    .hist-header { display: flex; align-items: center; gap: 12px; padding: 13px 15px; cursor: pointer; }
-    .hist-header:hover { background: #fafaf8; }
-    .hist-chip { width: 42px; height: 42px; border-radius: 10px; background: var(--surface2); color: var(--muted); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .hist-info { flex: 1; min-width: 0; }
-    .hist-title { font-size: 15px; font-weight: 500; }
-    .hist-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .hist-total { font-size: 13px; font-weight: 600; color: var(--accent); flex-shrink: 0; }
-    .hist-body { border-top: .5px solid var(--border); display: none; padding: 12px 15px; }
-    .hist-body.open { display: block; }
-    .hist-counts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-    .hist-count-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: .5px solid var(--border); }
-    .hist-count-row:nth-last-child(-n+2) { border-bottom: none; }
-    .hist-count-icon { font-size: 16px; flex-shrink: 0; }
-    .hist-count-label { font-size: 12px; color: var(--muted); flex: 1; }
-    .hist-count-val { font-size: 14px; font-weight: 600; color: var(--text); }
-    .hist-count-val.nz { color: var(--accent); }
+    /* SECTION LABEL */
+    .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 1.25rem 0 8px; }
+    .section-label:first-child { margin-top: 0; }
+
+    /* ZÁZNAMY */
+    .zaz-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); margin-bottom: 10px; overflow: hidden; }
+    .zaz-header { display: flex; align-items: center; gap: 12px; padding: 13px 15px; cursor: pointer; }
+    .zaz-header:hover { background: #fafaf8; }
+    .zaz-chip { width: 42px; height: 42px; border-radius: 10px; background: var(--surface2); color: var(--muted); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .zaz-info { flex: 1; min-width: 0; }
+    .zaz-title { font-size: 15px; font-weight: 500; }
+    .zaz-meta  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .zaz-total { font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .zaz-body  { border-top: .5px solid var(--border); display: none; }
+    .zaz-body.open { display: block; }
+
+    .zaz-worker-row { padding: 10px 15px; border-bottom: .5px solid var(--border); }
+    .zaz-worker-row:last-child { border-bottom: none; }
+    .zaz-worker-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .zaz-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 12px; }
+    .zaz-act-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+    .zaz-act-item span { font-weight: 600; color: var(--text); margin-left: auto; }
+    .zaz-act-item.nz { color: var(--text); }
+    .zaz-act-item.nz span { color: var(--accent); }
 
     /* DATE FILTER */
     .date-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
-    .date-row input[type="date"] { flex: 1; height: 38px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; appearance: none; }
-    .date-row input:focus { border-color: var(--accent); }
-    .today-btn { height: 38px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+    .date-row input[type="date"] { flex: 1; height: 38px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; }
+    .today-btn { height: 38px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--surface); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; }
     .today-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     /* STATS */
@@ -119,34 +118,25 @@
     .kpi-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px; text-align: center; }
     .kpi-num { font-size: 26px; font-weight: 700; line-height: 1; color: var(--accent); }
     .kpi-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
-    .stat-bar-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 16px; margin-bottom: 10px; }
-    .stat-bar-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 12px; }
-    .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-    .bar-row:last-child { margin-bottom: 0; }
-    .bar-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
-    .bar-label { font-size: 13px; min-width: 130px; flex-shrink: 0; }
-    .bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width .5s; }
-    .bar-count { font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; color: var(--text); }
+    .stat-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 16px; margin-bottom: 10px; }
+    .stat-card-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 12px; }
+    .br { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .br:last-child { margin-bottom: 0; }
+    .br-label { font-size: 13px; min-width: 50px; flex-shrink: 0; }
+    .br-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
+    .br-bar { height: 100%; border-radius: 4px; transition: width .4s; }
+    .br-count { font-size: 13px; font-weight: 600; min-width: 80px; text-align: right; }
     .period-row { display: flex; gap: 6px; margin-bottom: 12px; }
     .period-btn { height: 30px; padding: 0 14px; border-radius: 20px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 12px; font-family: 'DM Sans', sans-serif; color: var(--muted); cursor: pointer; transition: all .15s; }
     .period-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
     .chart-wrap { position: relative; height: 180px; margin-bottom: 4px; }
 
-    /* EMPTY */
     .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 14px; }
-
-    @media (max-width: 400px) {
-      .activity-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .activity-count { font-size: 32px; }
-      .btn-plus { width: 40px; height: 40px; font-size: 20px; }
-    }
+    .del-btn { height: 28px; padding: 0 12px; background: none; border: .5px solid rgba(192,57,43,0.25); border-radius: 6px; color: var(--red); font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; margin: 10px 15px; }
   </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-left">
     <div class="topbar-icon">📊</div>
@@ -162,40 +152,68 @@
   </div>
 </div>
 
-<!-- TABS -->
 <div class="main">
-  <!-- HLIADKA TAB -->
-  <div class="tab-panel active" id="tab-hliadka">
-    <div id="hliadka-content"></div>
-  </div>
+  <!-- ZÁZNAM TAB -->
+  <div class="tab-panel active" id="tab-zaznam">
 
-  <!-- HISTORIA TAB -->
-  <div class="tab-panel" id="tab-historia">
-    <div class="date-row">
-      <input type="date" id="hist-date" oninput="renderHistoria()" />
-      <button class="today-btn" onclick="resetHistDate()">Dnes</button>
+    <div class="card">
+      <div style="font-size:15px;font-weight:600;margin-bottom:14px">Nový záznam hliadky</div>
+      <div class="form-row">
+        <div class="form-group">
+          <span class="form-label">Dátum</span>
+          <input class="form-field" type="date" id="f-date"/>
+        </div>
+        <div class="form-group">
+          <span class="form-label">Hliadka</span>
+          <select class="form-field" id="f-shift">
+            <option value="">— Vybrať —</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <div id="historia-list"></div>
+
+    <div class="section-label">Pracovníci</div>
+    <div class="add-worker-row">
+      <select id="worker-select">
+        <option value="">— Vybrať pracovníka —</option>
+      </select>
+      <button class="btn-add" onclick="addWorker()">+ Pridať</button>
+    </div>
+    <div id="workers-list"></div>
+
+    <button class="btn-primary" id="save-btn" onclick="saveZaznam()" style="margin-top:4px">Uložiť záznam</button>
   </div>
 
-  <!-- STATISTIKY TAB -->
+  <!-- ZÁZNAMY TAB -->
+  <div class="tab-panel" id="tab-zaznamy">
+    <div class="date-row">
+      <input type="date" id="filter-date" oninput="window.renderZaznamy()"/>
+      <button class="today-btn" onclick="resetDate()">Dnes</button>
+    </div>
+    <div id="zaznamy-list"></div>
+  </div>
+
+  <!-- ŠTATISTIKY TAB -->
   <div class="tab-panel" id="tab-stats">
     <div class="period-row">
-      <button class="period-btn active" data-period="week" onclick="setPeriod('week')">Týždeň</button>
-      <button class="period-btn" data-period="month" onclick="setPeriod('month')">Mesiac</button>
-      <button class="period-btn" data-period="all" onclick="setPeriod('all')">Všetko</button>
+      <button class="period-btn active" data-p="week"  onclick="setPeriod('week')">Týždeň</button>
+      <button class="period-btn"        data-p="month" onclick="setPeriod('month')">Mesiac</button>
+      <button class="period-btn"        data-p="all"   onclick="setPeriod('all')">Všetko</button>
     </div>
     <div id="stats-content"></div>
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
-  <div class="nav-item active" id="nav-hliadka" onclick="switchTab('hliadka')">
+  <div class="nav-item active" id="nav-zaznam" onclick="switchTab('zaznam')">
     <span class="nav-icon">📋</span>
-    <span class="nav-label">Hliadka</span>
+    <span class="nav-label">Záznam</span>
   </div>
-  <div class="nav-item" id="nav-historia" onclick="switchTab('historia')">
+  <div class="nav-item" id="nav-zaznamy" onclick="switchTab('zaznamy')">
     <span class="nav-icon">🗂️</span>
     <span class="nav-label">Záznamy</span>
   </div>
@@ -206,9 +224,9 @@
 </nav>
 
 <script type="module">
-  import { initializeApp }        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, onValue, push, update, remove, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { getAuth, onAuthStateChanged }  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, onValue, push, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey:            "AIzaSyDOYPIXjbW3mrFpospLjTbt6ui4I318sg8",
@@ -220,16 +238,12 @@
     appId:             "1:544350754193:web:acb050a43126437790f630"
   };
 
-  // ── AUTH GUARD ──
   const app  = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  onAuthStateChanged(auth, user => {
-    if (!user) window.location.href = "https://msprk.github.io/";
-  });
-  // ────────────────
+  onAuthStateChanged(auth, user => { if (!user) window.location.href = "https://msprk.github.io/"; });
 
   const db     = getDatabase(app);
-  const svcRef = ref(db, "aktivity/sluzby");
+  const dbRef  = ref(db, "aktivity/zaznamy");
 
   // ── ACTIVITY TYPES ──
   const ACTIVITIES = [
@@ -242,309 +256,296 @@
     { id: "hliadkovanie", label: "Hliadkovanie",         icon: "🚶" },
     { id: "ine",          label: "Iné",                  icon: "📌" },
   ];
-
   const WORKERS = Array.from({length:39},(_,i)=>(i+1).toString().padStart(3,"0"));
-  let allServices = {}, statPeriod = "week";
+
+  // ── STATE ──
+  let allData = {};          // Firebase data
+  let formWorkers = {};      // { "001": { preverenie:0, pomoc:0, ... } }
+  let statPeriod = "week";
+  let openZazId  = null;
+  let statChart  = null;
 
   function setStatus(on) {
     document.getElementById("status-dot").className = "dot"+(on?" on":"");
     document.getElementById("status-text").textContent = on ? "Online" : "Offline";
   }
 
-  function renderAll() {
-    renderHliadka();
-    window.renderHistoria();
-    window.renderStats();
-  }
-
-  // Render immediately so UI isn't blank while Firebase connects
-  renderHliadka();
-
-  onValue(svcRef, snap => {
-    allServices = snap.val() || {};
-    setStatus(true);
-    renderAll();
-  }, () => {
-    setStatus(false);
-    renderHliadka();
-  });
-
-  // ── HELPERS ──
-  function totalCounts(counts) {
-    return ACTIVITIES.reduce((s,a) => s + (counts?.[a.id]||0), 0);
-  }
-  function getActive() {
-    return Object.entries(allServices).map(([id,v])=>({id,...v})).find(s=>s.status==="active");
-  }
   function todayStr() { return new Date().toISOString().split("T")[0]; }
-  function nowTime()  { return new Date().toTimeString().slice(0,5); }
-  function fmtWorker(w) { return w ? `Hliadkar ${w}` : "—"; }
+  function emptyWorkerCounts() { const o={}; ACTIVITIES.forEach(a=>o[a.id]=0); return o; }
+  function workerTotal(counts) { return ACTIVITIES.reduce((s,a)=>s+(counts[a.id]||0),0); }
+  function zazTotal(zaz) { return Object.values(zaz.workers||{}).reduce((s,w)=>s+workerTotal(w),0); }
+
+  // Set today on load
+  document.getElementById("f-date").value = todayStr();
+
+  // Populate worker select
+  const wSel = document.getElementById("worker-select");
+  WORKERS.forEach(w => { const o=document.createElement("option"); o.value=w; o.textContent=w; wSel.appendChild(o); });
+
+  // Firebase
+  onValue(dbRef, snap => {
+    allData = snap.val() || {};
+    setStatus(true);
+    window.renderZaznamy();
+    window.renderStats();
+  }, () => setStatus(false));
 
   // ── TAB SWITCH ──
   window.switchTab = function(tab) {
-    ["hliadka","historia","stats"].forEach(t => {
+    ["zaznam","zaznamy","stats"].forEach(t => {
       document.getElementById("tab-"+t).classList.toggle("active", t===tab);
       document.getElementById("nav-"+t).classList.toggle("active", t===tab);
     });
     if (tab==="stats") window.renderStats();
+    if (tab==="zaznamy") window.renderZaznamy();
   };
 
-  // ── RENDER HLIADKA ──
-  function renderHliadka() {
-    const active = getActive();
-    const el = document.getElementById("hliadka-content");
+  // ── ADD WORKER TO FORM ──
+  window.addWorker = function() {
+    const sel = document.getElementById("worker-select");
+    const w = sel.value;
+    if (!w) { alert("Vyberte pracovníka."); return; }
+    if (formWorkers[w]) { alert(`Pracovník ${w} je už pridaný.`); return; }
+    formWorkers[w] = emptyWorkerCounts();
+    sel.value = "";
+    renderFormWorkers();
+  };
 
-    if (!active) {
-      el.innerHTML = `
-        <div class="card">
-          <div style="font-size:15px;font-weight:600;margin-bottom:14px">Začať novú hliadku</div>
-          <div class="form-row">
-            <div class="form-group">
-              <span class="form-label">Dátum</span>
-              <input class="form-field" type="date" id="f-date" value="${todayStr()}"/>
-            </div>
-            <div class="form-group">
-              <span class="form-label">Čas začiatku</span>
-              <input class="form-field" type="time" id="f-start" value="${nowTime()}"/>
-            </div>
-            <div class="form-group full">
-              <span class="form-label">Hliadka</span>
-              <select class="form-field" id="f-shift">
-                <option value="">— Vybrať —</option>
-                ${["A","B","C","D"].map(s=>`<option value="${s}">${s}</option>`).join("")}
-              </select>
-            </div>
-          </div>
-          <button class="btn-primary" onclick="startShift()">Začať hliadku</button>
-        </div>
-      `;
+  window.removeWorker = function(w) {
+    delete formWorkers[w];
+    renderFormWorkers();
+  };
+
+  window.inc = function(w, actId) {
+    formWorkers[w][actId] = (formWorkers[w][actId]||0) + 1;
+    renderFormWorkers();
+  };
+
+  window.dec = function(w, actId) {
+    if ((formWorkers[w][actId]||0) <= 0) return;
+    formWorkers[w][actId]--;
+    renderFormWorkers();
+  };
+
+  function renderFormWorkers() {
+    const el = document.getElementById("workers-list");
+    const keys = Object.keys(formWorkers);
+    if (!keys.length) {
+      el.innerHTML = `<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:13px;background:var(--surface);border-radius:var(--radius-lg);border:.5px solid var(--border);margin-bottom:10px">Pridajte pracovníkov hliadky</div>`;
       return;
     }
-
-    const counts = active.counts || {};
-    el.innerHTML = `
-      <div class="shift-header">
-        <div class="shift-chip">${active.shift||"?"}</div>
-        <div class="shift-info">
-          <div class="shift-name">Hliadka ${active.shift||"?"}</div>
-          <div class="shift-meta">${active.date||""} · od ${active.startTime||""}</div>
+    el.innerHTML = keys.map(w => {
+      const counts = formWorkers[w];
+      const total  = workerTotal(counts);
+      return `
+      <div class="worker-card">
+        <div class="worker-card-header">
+          <div class="worker-chip">${w}</div>
+          <div class="worker-chip-label">Pracovník ${w}</div>
+          <div class="worker-total">${total} aktiv.</div>
+          <button class="btn-remove-worker" onclick="removeWorker('${w}')">×</button>
         </div>
-        <div class="shift-badge">● Aktívna</div>
-      </div>
-      <div class="activity-grid">
         ${ACTIVITIES.map(a => {
           const cnt = counts[a.id]||0;
           return `
-          <div class="activity-card">
-            <div class="activity-icon">${a.icon}</div>
-            <div class="activity-label">${a.label}</div>
-            <div class="activity-count${cnt>0?" nonzero":""}" id="cnt-${a.id}">${cnt}</div>
-            <div class="counter-row">
-              <button class="btn-minus" onclick="decActivity('${active.id}','${a.id}')" ${cnt===0?"disabled":""} id="minus-${a.id}">−</button>
-              <button class="btn-plus"  onclick="incActivity('${active.id}','${a.id}')">+</button>
+          <div class="act-row">
+            <span class="act-icon">${a.icon}</span>
+            <span class="act-label">${a.label}</span>
+            <div class="act-counter">
+              <button class="btn-minus" onclick="dec('${w}','${a.id}')" ${cnt===0?"disabled":""}>−</button>
+              <div class="act-num${cnt>0?" nz":""}">${cnt}</div>
+              <button class="btn-plus" onclick="inc('${w}','${a.id}')">+</button>
             </div>
           </div>`;
         }).join("")}
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 2px">
-        <span style="font-size:13px;color:var(--muted)">Celkom zaznamenaných aktivít</span>
-        <span style="font-size:18px;font-weight:700;color:var(--accent)">${totalCounts(counts)}</span>
-      </div>
-      <button class="btn-danger" onclick="endShift('${active.id}')">■ Ukončiť hliadku</button>
-    `;
+      </div>`;
+    }).join("");
   }
 
-  window.startShift = function() {
-    const date  = document.getElementById("f-date")?.value;
-    const start = document.getElementById("f-start")?.value;
-    const shift = document.getElementById("f-shift")?.value;
+  // Init empty state
+  renderFormWorkers();
+
+  // ── SAVE ──
+  window.saveZaznam = async function() {
+    const date  = document.getElementById("f-date").value;
+    const shift = document.getElementById("f-shift").value;
     if (!date)  { alert("Vyplňte dátum."); return; }
     if (!shift) { alert("Vyberte hliadku."); return; }
-    const counts = {};
-    ACTIVITIES.forEach(a => counts[a.id] = 0);
-    push(svcRef, { date, startTime: start, shift, status:"active", ts: Date.now(), counts });
+    if (!Object.keys(formWorkers).length) { alert("Pridajte aspoň jedného pracovníka."); return; }
+
+    const btn = document.getElementById("save-btn");
+    btn.disabled = true; btn.textContent = "Ukladanie...";
+
+    await push(dbRef, { date, shift, ts: Date.now(), workers: formWorkers });
+
+    // Reset form
+    formWorkers = {};
+    document.getElementById("f-date").value = todayStr();
+    document.getElementById("f-shift").value = "";
+    renderFormWorkers();
+    btn.disabled = false; btn.textContent = "Uložiť záznam";
+    switchTab("zaznamy");
   };
 
-  window.endShift = function(id) {
-    if (!confirm("Ukončiť hliadku?")) return;
-    update(ref(db,"aktivity/sluzby/"+id), { status:"done", endTime: nowTime() });
-  };
-
-  window.incActivity = function(svcId, actId) {
-    update(ref(db, `aktivity/sluzby/${svcId}/counts`), { [actId]: increment(1) });
-  };
-
-  window.decActivity = function(svcId, actId) {
-    const active = getActive();
-    if (!active) return;
-    const cur = (active.counts||{})[actId]||0;
-    if (cur <= 0) return;
-    update(ref(db, `aktivity/sluzby/${svcId}/counts`), { [actId]: increment(-1) });
-  };
-
-  // ── RENDER HISTÓRIA ──
-  window.renderHistoria = function() {
-    const filterDate = document.getElementById("hist-date")?.value || "";
-    const entries = Object.entries(allServices)
+  // ── ZÁZNAMY ──
+  window.renderZaznamy = function() {
+    const fDate = document.getElementById("filter-date")?.value || "";
+    const entries = Object.entries(allData)
       .map(([id,v])=>({id,...v}))
-      .filter(s => s.status === "done")
-      .filter(s => !filterDate || s.date === filterDate)
-      .sort((a,b) => (b.ts||0)-(a.ts||0));
+      .filter(z => !fDate || z.date === fDate)
+      .sort((a,b)=>(b.date||"").localeCompare(a.date||"") || (b.ts||0)-(a.ts||0));
 
-    const el = document.getElementById("historia-list");
+    const el = document.getElementById("zaznamy-list");
     if (!entries.length) {
-      el.innerHTML = `<div class="empty">Žiadne ukončené hliadky${filterDate ? " pre vybraný dátum" : ""}.</div>`;
+      el.innerHTML = `<div class="empty">Žiadne záznamy${fDate?" pre vybraný dátum":""}.</div>`;
       return;
     }
-
-    el.innerHTML = entries.map(s => {
-      const counts = s.counts || {};
-      const total  = totalCounts(counts);
-      const isOpen = window._histOpenId === s.id;
+    el.innerHTML = entries.map(z => {
+      const total   = zazTotal(z);
+      const wCount  = Object.keys(z.workers||{}).length;
+      const isOpen  = openZazId === z.id;
       return `
-      <div class="hist-card">
-        <div class="hist-header" onclick="toggleHist('${s.id}')">
-          <div class="hist-chip">${s.shift||"?"}</div>
-          <div class="hist-info">
-            <div class="hist-title">Hliadka ${s.shift||"?"}</div>
-            <div class="hist-meta">${s.date||""} · ${s.startTime||""}${s.endTime?" – "+s.endTime:""}</div>
+      <div class="zaz-card">
+        <div class="zaz-header" onclick="toggleZaz('${z.id}')">
+          <div class="zaz-chip">${z.shift||"?"}</div>
+          <div class="zaz-info">
+            <div class="zaz-title">Hliadka ${z.shift||"?"} · ${z.date||""}</div>
+            <div class="zaz-meta">${wCount} pracovník${wCount===1?"":"ov"} · ${total} aktivít</div>
           </div>
-          <div class="hist-total">${total} aktiv.</div>
+          <div class="zaz-total">${total}</div>
         </div>
-        <div class="hist-body${isOpen?" open":""}">
-          <div class="hist-counts">
-            ${ACTIVITIES.map(a => {
-              const v = counts[a.id]||0;
-              return `
-              <div class="hist-count-row">
-                <span class="hist-count-icon">${a.icon}</span>
-                <span class="hist-count-label">${a.label}</span>
-                <span class="hist-count-val${v>0?" nz":""}">${v}</span>
-              </div>`;
-            }).join("")}
-          </div>
-          <button onclick="deleteShift('${s.id}')" style="margin-top:10px;height:28px;padding:0 12px;background:none;border:.5px solid rgba(192,57,43,0.25);border-radius:6px;color:var(--red);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer">Vymazať hliadku</button>
+        <div class="zaz-body${isOpen?" open":""}">
+          ${Object.entries(z.workers||{}).sort((a,b)=>workerTotal(b[1])-workerTotal(a[1])).map(([w,counts])=>`
+          <div class="zaz-worker-row">
+            <div class="zaz-worker-name">Pracovník ${w} · <span style="color:var(--accent)">${workerTotal(counts)} aktivít</span></div>
+            <div class="zaz-acts">
+              ${ACTIVITIES.map(a=>{
+                const v=counts[a.id]||0;
+                return `<div class="zaz-act-item${v>0?" nz":""}">
+                  <span>${a.icon}</span> ${a.label} <span>${v}</span>
+                </div>`;
+              }).join("")}
+            </div>
+          </div>`).join("")}
+          <button class="del-btn" onclick="deleteZaz('${z.id}')">Vymazať záznam</button>
         </div>
       </div>`;
     }).join("");
   };
 
-  window._histOpenId = null;
-  window.toggleHist = function(id) {
-    window._histOpenId = window._histOpenId === id ? null : id;
-    renderHistoria();
-  };
+  window.toggleZaz = id => { openZazId = openZazId===id?null:id; window.renderZaznamy(); };
+  window.deleteZaz = id => { if (confirm("Vymazať tento záznam?")) remove(ref(db,"aktivity/zaznamy/"+id)); };
+  window.resetDate = () => { document.getElementById("filter-date").value=todayStr(); window.renderZaznamy(); };
 
-  window.deleteShift = function(id) {
-    if (confirm("Vymazať túto hliadku?")) remove(ref(db,"aktivity/sluzby/"+id));
-  };
-
-  window.resetHistDate = function() {
-    document.getElementById("hist-date").value = todayStr();
-    renderHistoria();
-  };
-
-  // ── RENDER STATS ──
+  // ── ŠTATISTIKY ──
   window.setPeriod = function(p) {
     statPeriod = p;
-    document.querySelectorAll(".period-btn").forEach(b => b.classList.toggle("active", b.dataset.period===p));
-    renderStats();
+    document.querySelectorAll(".period-btn").forEach(b=>b.classList.toggle("active",b.dataset.p===p));
+    window.renderStats();
   };
 
-  let statChart = null;
-
   window.renderStats = function() {
-    const now = new Date();
-    const cutoff = statPeriod === "week"  ? new Date(now - 7*86400000).toISOString().split("T")[0]
-                 : statPeriod === "month" ? new Date(now - 30*86400000).toISOString().split("T")[0]
+    const now    = new Date();
+    const cutoff = statPeriod==="week"  ? new Date(now-7*86400000).toISOString().split("T")[0]
+                 : statPeriod==="month" ? new Date(now-30*86400000).toISOString().split("T")[0]
                  : "0000-00-00";
 
-    const entries = Object.values(allServices)
-      .filter(s => s.status === "done" && (s.date||"") >= cutoff)
-      .sort((a,b) => (a.date||"") > (b.date||"") ? 1 : -1);
+    const entries = Object.values(allData).filter(z=>(z.date||"")>=cutoff);
 
-    const totalAct = {};
-    ACTIVITIES.forEach(a => totalAct[a.id] = 0);
-    entries.forEach(s => ACTIVITIES.forEach(a => totalAct[a.id] += (s.counts?.[a.id]||0)));
+    // Totals
+    const totalSessions = entries.length;
+    const totalActs     = entries.reduce((s,z)=>s+zazTotal(z),0);
+    const totalWorkers  = new Set(entries.flatMap(z=>Object.keys(z.workers||{}))).size;
 
-    const grandTotal  = Object.values(totalAct).reduce((a,b)=>a+b, 0);
-    const numShifts   = entries.length;
-    const avgPerShift = numShifts ? Math.round(grandTotal/numShifts) : 0;
-    const topAct      = ACTIVITIES.reduce((best,a) => totalAct[a.id] > (totalAct[best.id]||0) ? a : best, ACTIVITIES[0]);
+    // Per-worker
+    const workerMap = {};
+    entries.forEach(z => Object.entries(z.workers||{}).forEach(([w,counts]) => {
+      if (!workerMap[w]) workerMap[w] = { acts:0 };
+      workerMap[w].acts += workerTotal(counts);
+    }));
+    const topWorkers = Object.entries(workerMap).sort((a,b)=>b[1].acts-a[1].acts).slice(0,10);
+    const maxW = Math.max(...topWorkers.map(([,v])=>v.acts), 1);
+
+    // Per-activity
+    const actMap = {};
+    ACTIVITIES.forEach(a=>actMap[a.id]=0);
+    entries.forEach(z=>Object.values(z.workers||{}).forEach(counts=>ACTIVITIES.forEach(a=>actMap[a.id]+=(counts[a.id]||0))));
+    const maxA = Math.max(...Object.values(actMap), 1);
+
+    // Per-shift
+    const shiftColors = {"A":"#1d5fa8","B":"#2d6a4f","C":"#b45309","D":"#c0392b"};
+    const shiftData   = ["A","B","C","D"].map(sh=>({
+      sh,
+      acts: entries.filter(z=>z.shift===sh).reduce((s,z)=>s+zazTotal(z),0),
+      sess: entries.filter(z=>z.shift===sh).length
+    }));
+    const maxSh = Math.max(...shiftData.map(d=>d.acts), 1);
 
     const el = document.getElementById("stats-content");
     if (!el) return;
-
     el.innerHTML = `
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="kpi-num">${grandTotal}</div><div class="kpi-label">Aktivít celkom</div></div>
-        <div class="kpi-card"><div class="kpi-num">${numShifts}</div><div class="kpi-label">Hliadok</div></div>
-        <div class="kpi-card"><div class="kpi-num">${avgPerShift}</div><div class="kpi-label">Priemer / hliadka</div></div>
+        <div class="kpi-card"><div class="kpi-num">${totalActs}</div><div class="kpi-label">Aktivít celkom</div></div>
+        <div class="kpi-card"><div class="kpi-num">${totalSessions}</div><div class="kpi-label">Záznamy</div></div>
+        <div class="kpi-card"><div class="kpi-num">${totalWorkers}</div><div class="kpi-label">Pracovníci</div></div>
       </div>
 
-      ${numShifts === 0 ? `<div class="empty">Žiadne dáta za vybrané obdobie.</div>` : `
-      <div class="stat-bar-card">
-        <div class="stat-bar-title">Aktivita podľa typu</div>
+      ${totalSessions===0 ? `<div class="empty">Žiadne dáta za vybrané obdobie.</div>` : `
+      <div class="stat-card">
+        <div class="stat-card-title">Podľa pracovníka</div>
+        ${topWorkers.map(([w,v])=>`
+          <div class="br">
+            <div class="br-label">${w}</div>
+            <div class="br-wrap"><div class="br-bar" style="width:${Math.round(v.acts/maxW*100)}%;background:var(--accent)"></div></div>
+            <div class="br-count"><span style="font-weight:700;color:var(--accent)">${v.acts}</span> <span style="font-size:11px;color:var(--muted)">aktiv.</span></div>
+          </div>`).join("")}
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-title">Podľa hliadky</div>
+        ${shiftData.map(({sh,acts,sess})=>`
+          <div class="br">
+            <div class="br-label">Hliadka ${sh}</div>
+            <div class="br-wrap"><div class="br-bar" style="width:${Math.round(acts/maxSh*100)}%;background:${shiftColors[sh]}"></div></div>
+            <div class="br-count">
+              <span style="font-weight:700">${acts}</span> <span style="font-size:11px;color:var(--muted)">aktiv.</span>
+              &nbsp;·&nbsp; <span style="font-size:11px;color:var(--muted)">${sess} záz.</span>
+            </div>
+          </div>`).join("")}
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-title">Podľa typu aktivity</div>
         <div class="chart-wrap"><canvas id="act-chart"></canvas></div>
       </div>
 
-      <div class="stat-bar-card">
-        <div class="stat-bar-title">Prehľad typov</div>
-        ${ACTIVITIES.map(a => {
-          const maxV = Math.max(...Object.values(totalAct), 1);
-          const pct  = Math.round(totalAct[a.id]/maxV*100);
-          return `
-          <div class="bar-row">
-            <span class="bar-icon">${a.icon}</span>
-            <span class="bar-label">${a.label}</span>
-            <div class="bar-wrap"><div class="bar-fill" style="width:${pct}%"></div></div>
-            <span class="bar-count">${totalAct[a.id]}</span>
-          </div>`;
-        }).join("")}
-        <div style="margin-top:12px;padding-top:10px;border-top:.5px solid var(--border);font-size:13px;color:var(--muted)">
-          Najčastejšia: <strong style="color:var(--text)">${topAct.icon} ${topAct.label}</strong> &nbsp;·&nbsp; ${totalAct[topAct.id]} záznamov
-        </div>
-      </div>
-
-      <div class="stat-bar-card">
-        <div class="stat-bar-title">Prehľad hliadok (${numShifts})</div>
-        ${entries.slice().reverse().map(s => {
-          const tot = totalCounts(s.counts);
-          return `
-          <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--border)">
-            <div style="width:36px;height:36px;border-radius:8px;background:var(--surface2);color:var(--muted);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.shift||"?"}</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:500">Hliadka ${s.shift||"?"}</div>
-              <div style="font-size:12px;color:var(--muted)">${s.date||""} · ${s.startTime||""}${s.endTime?" – "+s.endTime:""}</div>
-            </div>
-            <div style="font-size:15px;font-weight:700;color:var(--accent)">${tot}</div>
-          </div>`;
-        }).join("")}
+      <div class="stat-card">
+        <div class="stat-card-title">Typy aktivít — detail</div>
+        ${ACTIVITIES.map(a=>`
+          <div class="br">
+            <div class="br-label" style="min-width:160px;font-size:12px">${a.icon} ${a.label}</div>
+            <div class="br-wrap"><div class="br-bar" style="width:${Math.round(actMap[a.id]/maxA*100)}%;background:var(--accent)"></div></div>
+            <div class="br-count" style="font-weight:700;color:var(--accent)">${actMap[a.id]}</div>
+          </div>`).join("")}
       </div>`}
     `;
 
-    if (numShifts > 0) {
+    if (totalSessions > 0) {
       if (statChart) { statChart.destroy(); statChart = null; }
       const ctx = document.getElementById("act-chart");
       if (ctx) {
         statChart = new Chart(ctx, {
           type: "bar",
           data: {
-            labels: ACTIVITIES.map(a => a.label),
-            datasets: [{
-              data: ACTIVITIES.map(a => totalAct[a.id]),
-              backgroundColor: "rgba(29,95,168,0.18)",
-              borderColor: "rgba(29,95,168,0.7)",
-              borderWidth: 1.5,
-              borderRadius: 6,
-            }]
+            labels: ACTIVITIES.map(a=>a.label),
+            datasets: [{ data: ACTIVITIES.map(a=>actMap[a.id]), backgroundColor:"rgba(29,95,168,0.18)", borderColor:"rgba(29,95,168,0.7)", borderWidth:1.5, borderRadius:6 }]
           },
           options: {
-            responsive: true, maintainAspectRatio: true,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: { grid: { display: false }, ticks: { font: { family: "DM Sans", size: 11 }, color: "#7a746a", maxRotation: 30 } },
-              y: { grid: { color: "rgba(0,0,0,0.05)" }, ticks: { font: { family: "DM Sans", size: 11 }, color: "#7a746a", precision: 0 }, beginAtZero: true }
+            responsive:true, maintainAspectRatio:true,
+            plugins:{ legend:{display:false} },
+            scales:{
+              x:{ grid:{display:false}, ticks:{font:{family:"DM Sans",size:10},color:"#7a746a",maxRotation:35} },
+              y:{ grid:{color:"rgba(0,0,0,0.05)"}, ticks:{font:{family:"DM Sans",size:11},color:"#7a746a",precision:0}, beginAtZero:true }
             }
           }
         });
