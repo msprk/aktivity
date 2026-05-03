@@ -21,7 +21,7 @@
 
     /* ── TOPBAR ── */
     .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 1.25rem; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; }
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-center { display: flex; align-items: center; gap: 10px; position: absolute; left: 50%; transform: translateX(-50%); }
     .topbar-icon { width: 30px; height: 30px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
     .topbar-title { font-size: 17px; font-weight: 600; }
     .home-btn { width: 32px; height: 32px; border-radius: 8px; border: .5px solid var(--border-strong); background: var(--surface2); color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; text-decoration: none; flex-shrink: 0; }
@@ -39,57 +39,64 @@
     .nav-label { font-size: 11px; color: var(--muted); }
 
     /* ── LAYOUT ── */
-    .main { max-width: 640px; margin: 0 auto; padding: 1rem; }
+    .main { max-width: 600px; margin: 0 auto; padding: 1rem; }
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
     /* ── GENERIC ── */
-    .card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 16px; margin-bottom: 10px; }
     .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 1.25rem 0 8px; }
     .section-label:first-child { margin-top: 0; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+
+    /* ── NO-SERVICE CARD ── */
+    .no-service-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 1.5rem; text-align: center; margin-bottom: 1rem; }
+    .no-service-icon { font-size: 36px; margin-bottom: 12px; }
+    .no-service-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .no-service-sub { font-size: 13px; color: var(--muted); }
+
+    /* ── START FORM CARD ── */
+    .form-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 1.25rem; }
+    .form-card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 14px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
     .form-group { display: flex; flex-direction: column; gap: 4px; }
-    .form-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
-    .form-field { height: 40px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; width: 100%; }
-    .form-field:focus { border-color: var(--accent); }
+    .form-group.full { grid-column: 1/-1; }
+    .form-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .form-field { height: 42px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; width: 100%; transition: border-color .15s; }
+    .form-field:focus { border-color: var(--accent); background: #fff; }
     select.form-field { -webkit-appearance: none; appearance: none; }
-    .btn-primary { width: 100%; height: 46px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .15s; }
-    .btn-primary:hover { background: var(--accent-dark); }
-    .btn-primary:disabled { background: var(--muted); cursor: not-allowed; }
-    .btn-danger { width: 100%; height: 42px; background: none; color: var(--red); border: 1.5px solid rgba(192,57,43,0.35); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; margin-top: 8px; }
-    .btn-danger:hover { background: var(--red-light); }
+    .submit-btn { width: 100%; height: 46px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; margin-top: 4px; transition: background .15s; }
+    .submit-btn:hover { background: var(--accent-dark); }
+    .submit-btn:disabled { background: var(--muted); cursor: not-allowed; }
 
-    /* ── START PANEL ── */
-    .start-empty { text-align: center; padding: 2.5rem 1rem; }
-    .start-icon-wrap { width: 64px; height: 64px; background: var(--accent-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 16px; }
-    .start-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
-    .start-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    /* ── WORKER CHIPS (start form) ── */
+    .add-worker-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .add-worker-row select { flex: 1; height: 42px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface2); outline: none; -webkit-appearance: none; appearance: none; }
+    .btn-add { height: 42px; padding: 0 16px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
 
-    /* ── ADD WORKER ROW ── */
-    .add-worker-row { display: flex; gap: 8px; margin-bottom: 0; }
-    .add-worker-row select { flex: 1; height: 40px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; appearance: none; }
-    .btn-add { height: 40px; padding: 0 16px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
-
-    /* ── ACTIVE SHIFT HEADER ── */
-    .shift-header { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
-    .shift-badge { width: 48px; height: 48px; border-radius: 12px; background: var(--accent); color: #fff; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .shift-info { flex: 1; min-width: 0; }
-    .shift-title { font-size: 16px; font-weight: 600; }
-    .shift-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .shift-total { font-size: 22px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    /* ── ACTIVE SERVICE CARD ── */
+    .active-service-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); overflow: hidden; margin-bottom: 1rem; }
+    .active-service-header { padding: 16px; border-bottom: .5px solid var(--border); display: flex; align-items: center; gap: 14px; }
+    .active-worker-chip { width: 52px; height: 52px; border-radius: 12px; background: var(--green-light); color: var(--green); font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .active-service-info .label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--green); margin-bottom: 2px; }
+    .active-service-info .title { font-size: 18px; font-weight: 600; }
+    .active-service-info .since { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .active-footer { display: flex; gap: 8px; padding: 12px 15px; background: var(--surface2); border-top: .5px solid var(--border); }
+    .add-worker-btn { flex: 1; height: 42px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .15s; }
+    .add-worker-btn:hover { background: var(--accent-dark); }
+    .end-service-btn { height: 42px; padding: 0 16px; background: var(--red-light); color: var(--red); border: 1px solid rgba(192,57,43,0.2); border-radius: var(--radius); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: background .15s; }
+    .end-service-btn:hover { background: #fcd5d0; }
 
     /* ── ACTIVITY GRID TABLE ── */
-    .act-grid-wrap { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); overflow-x: auto; margin-bottom: 10px; -webkit-overflow-scrolling: touch; }
+    .act-grid-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 15px 12px; }
     .act-grid { border-collapse: collapse; min-width: 100%; }
     .act-grid th, .act-grid td { border-bottom: .5px solid var(--border); white-space: nowrap; }
     .act-grid tbody tr:last-child td { border-bottom: none; }
-    .act-name-th { padding: 10px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); text-align: left; min-width: 168px; background: var(--surface); position: sticky; left: 0; z-index: 2; border-right: .5px solid var(--border); }
+    .act-name-th { padding: 10px 12px 10px 0; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); text-align: left; min-width: 172px; background: var(--surface); position: sticky; left: -15px; z-index: 2; border-right: .5px solid var(--border); }
     .worker-th { padding: 8px 10px; background: var(--surface2); text-align: center; min-width: 110px; border-right: .5px solid var(--border); }
     .worker-th:last-child { border-right: none; }
     .worker-th-inner { display: flex; flex-direction: column; align-items: center; gap: 5px; }
     .worker-th-label { font-size: 14px; font-weight: 700; color: var(--accent); }
-    .btn-remove-worker { width: 22px; height: 22px; border-radius: 5px; border: .5px solid rgba(192,57,43,0.3); background: none; color: var(--red); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; }
-    .act-name-td { padding: 7px 14px; font-size: 13px; color: var(--text); background: var(--surface); position: sticky; left: 0; z-index: 1; display: flex; align-items: center; gap: 7px; border-right: .5px solid var(--border); }
+    .btn-remove-worker { width: 20px; height: 20px; border-radius: 5px; border: .5px solid rgba(192,57,43,0.3); background: none; color: var(--red); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 1; }
+    .act-name-td { padding: 7px 12px 7px 0; font-size: 13px; color: var(--text); background: var(--surface); position: sticky; left: -15px; z-index: 1; display: flex; align-items: center; gap: 7px; border-right: .5px solid var(--border); }
     .act-icon { font-size: 15px; flex-shrink: 0; }
     .act-cell { padding: 5px 8px; text-align: center; border-right: .5px solid var(--border); }
     .act-cell:last-child { border-right: none; }
@@ -105,6 +112,14 @@
     .btn-plus:hover { background: var(--accent-dark); }
     .btn-plus:active { transform: scale(.93); }
 
+    /* ── ADD WORKER MODAL ── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+    .modal-overlay.hidden { display: none; }
+    .modal { background: var(--surface); border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: 1.25rem; width: 100%; max-width: 600px; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .modal-title { font-size: 15px; font-weight: 600; }
+    .modal-close { background: var(--surface2); border: none; color: var(--muted); width: 28px; height: 28px; border-radius: 6px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+
     /* ── ZÁZNAMY ── */
     .date-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; }
     .date-row input[type="date"] { flex: 1; height: 38px; border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 0 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: var(--surface); outline: none; -webkit-appearance: none; }
@@ -113,12 +128,15 @@
     .zaz-card { background: var(--surface); border-radius: var(--radius-lg); border: .5px solid var(--border); margin-bottom: 10px; overflow: hidden; }
     .zaz-header { display: flex; align-items: center; gap: 12px; padding: 13px 15px; cursor: pointer; }
     .zaz-header:hover { background: #fafaf8; }
-    .zaz-chip { width: 42px; height: 42px; border-radius: 10px; background: var(--surface2); color: var(--muted); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .zaz-chip.live { background: var(--green-light); color: var(--green); }
+    .zaz-chip { width: 44px; height: 44px; border-radius: 10px; background: var(--surface2); color: var(--muted); font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .zaz-chip.active { background: var(--green-light); color: var(--green); }
     .zaz-info { flex: 1; min-width: 0; }
     .zaz-title { font-size: 15px; font-weight: 500; }
     .zaz-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .zaz-total { font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+    .svc-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+    .svc-badge.active { background: var(--green-light); color: var(--green); }
+    .svc-badge.done   { background: var(--surface2); color: var(--muted); }
     .zaz-body { border-top: .5px solid var(--border); display: none; }
     .zaz-body.open { display: block; }
     .zaz-worker-row { padding: 10px 15px; border-bottom: .5px solid var(--border); }
@@ -149,24 +167,31 @@
     .period-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
     .chart-wrap { position: relative; height: 180px; margin-bottom: 4px; }
     .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 14px; }
+
+    @media (max-width: 480px) {
+      .active-footer { flex-direction: column; }
+      .add-worker-btn { flex: none; width: 100%; }
+      .end-service-btn { width: 100%; text-align: center; }
+    }
   </style>
 </head>
 <body>
 
-<div class="topbar">
-  <div class="topbar-left">
+<nav class="topbar">
+  <a class="home-btn" href="https://msprk.github.io" title="Dashboard">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </a>
+  <div class="topbar-center">
     <div class="topbar-icon">📊</div>
     <span class="topbar-title">Aktivita hliadky</span>
   </div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <div class="status-pill"><div class="dot" id="status-dot"></div><span id="status-text">...</span></div>
-    <a href="https://msprk.github.io/" class="home-btn" title="Domov">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    </a>
+  <div class="status-pill">
+    <div class="dot" id="status-dot"></div>
+    <span id="status-text">Pripájanie...</span>
   </div>
-</div>
+</nav>
 
 <div class="main">
 
@@ -196,9 +221,25 @@
 
 </div>
 
+<!-- MODAL: pridať pracovníka počas hliadky -->
+<div class="modal-overlay hidden" id="modal-worker">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Pridať pracovníka</span>
+      <button class="modal-close" onclick="closeWorkerModal()">×</button>
+    </div>
+    <div class="add-worker-row" style="margin-bottom:0">
+      <select id="modal-worker-select" class="form-field" style="height:42px;flex:1">
+        <option value="">— Vybrať pracovníka —</option>
+      </select>
+      <button class="btn-add" onclick="addActiveWorker()">Pridať</button>
+    </div>
+  </div>
+</div>
+
 <nav class="bottom-nav">
   <div class="nav-item active" id="nav-hliadka" onclick="switchTab('hliadka')">
-    <span class="nav-icon">🚶</span>
+    <span class="nav-icon" id="hliadka-icon">🚶</span>
     <span class="nav-label">Hliadka</span>
   </div>
   <div class="nav-item" id="nav-zaznamy" onclick="switchTab('zaznamy')">
@@ -248,10 +289,11 @@
 
   // ── STATE ──
   let allData    = {};
-  let activeId   = null;   // Firebase key of the active shift
+  let activeId   = null;
   let openZazId  = null;
   let statPeriod = "week";
   let statChart  = null;
+  window._startWorkers = [];
 
   // ── HELPERS ──
   function setStatus(on) {
@@ -261,15 +303,15 @@
   function todayStr() { return new Date().toISOString().split("T")[0]; }
   function emptyWorkerCounts() { const o={}; ACTIVITIES.forEach(a=>o[a.id]=0); return o; }
   function workerTotal(counts) { return ACTIVITIES.reduce((s,a)=>s+(counts[a.id]||0),0); }
-  function shiftTotal(shift) { return Object.values(shift.workers||{}).reduce((s,w)=>s+workerTotal(w),0); }
+  function shiftTotal(z) { return Object.values(z.workers||{}).reduce((s,w)=>s+workerTotal(w),0); }
 
   // ── FIREBASE ──
   onValue(dbRef, snap => {
     allData = snap.val() || {};
     setStatus(true);
-    // Find active shift
-    const actEntry = Object.entries(allData).find(([,v])=>v.active===true);
+    const actEntry = Object.entries(allData).find(([,v])=>v.status==="active");
     activeId = actEntry ? actEntry[0] : null;
+    document.getElementById("hliadka-icon").textContent = activeId ? "🟢" : "🚶";
     renderHliadka();
     window.renderZaznamy();
     window.renderStats();
@@ -295,24 +337,25 @@
     }
   }
 
+  // ── START PANEL ──
   function renderStartPanel(el) {
     el.innerHTML = `
-      <div class="start-empty">
-        <div class="start-icon-wrap">🚶</div>
-        <div class="start-title">Žiadna aktívna hliadka</div>
-        <div class="start-sub">Začnite novú hliadku a zaznamenajte aktivity pracovníkov.</div>
+      <div class="no-service-card">
+        <div class="no-service-icon">🚶</div>
+        <div class="no-service-title">Žiadna aktívna hliadka</div>
+        <div class="no-service-sub">Momentálne nie je spustená žiadna hliadka.</div>
       </div>
-      <div class="card">
-        <div style="font-size:15px;font-weight:600;margin-bottom:14px">Začať hliadku</div>
-        <div class="form-row">
+      <div class="form-card">
+        <div class="form-card-title">Začať novú hliadku</div>
+        <div class="form-grid">
           <div class="form-group">
-            <span class="form-label">Dátum</span>
+            <label class="form-label">Dátum</label>
             <input class="form-field" type="date" id="f-date" value="${todayStr()}"/>
           </div>
           <div class="form-group">
-            <span class="form-label">Hliadka</span>
+            <label class="form-label">Hliadka</label>
             <select class="form-field" id="f-shift">
-              <option value="">— Vybrať —</option>
+              <option value="">—</option>
               <option value="A">A</option>
               <option value="B">B</option>
               <option value="C">C</option>
@@ -320,18 +363,17 @@
             </select>
           </div>
         </div>
-        <div class="section-label" style="margin-top:4px">Pracovníci</div>
-        <div class="add-worker-row" style="margin-bottom:10px">
+        <div style="font-size:12px;color:var(--muted);font-weight:500;margin-bottom:8px">Pracovníci</div>
+        <div class="add-worker-row">
           <select id="worker-select-start">
             <option value="">— Vybrať pracovníka —</option>
             ${WORKERS.map(w=>`<option value="${w}">${w}</option>`).join("")}
           </select>
           <button class="btn-add" onclick="addStartWorker()">+ Pridať</button>
         </div>
-        <div id="start-workers-chips" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
-        <button class="btn-primary" onclick="startHliadka()">Začať hliadku</button>
+        <div id="start-workers-chips" style="display:flex;flex-wrap:wrap;gap:6px;min-height:22px;margin-bottom:14px"></div>
+        <button class="submit-btn" id="start-btn" onclick="startHliadka()">Začať hliadku</button>
       </div>`;
-    // Local state for the start form
     window._startWorkers = [];
     renderStartChips();
   }
@@ -340,13 +382,13 @@
     const el = document.getElementById("start-workers-chips");
     if (!el) return;
     if (!window._startWorkers.length) {
-      el.innerHTML = `<span style="font-size:13px;color:var(--muted)">Žiadni pracovníci</span>`;
+      el.innerHTML = `<span style="font-size:12px;color:var(--muted)">Žiadni pracovníci</span>`;
       return;
     }
     el.innerHTML = window._startWorkers.map(w => `
       <div style="display:flex;align-items:center;gap:5px;background:var(--accent-light);border-radius:20px;padding:4px 10px 4px 12px;font-size:13px;font-weight:600;color:var(--accent)">
         ${w}
-        <button onclick="removeStartWorker('${w}')" style="width:18px;height:18px;border-radius:50%;border:none;background:rgba(29,95,168,0.15);color:var(--accent);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>
+        <button onclick="removeStartWorker('${w}')" style="width:18px;height:18px;border-radius:50%;border:none;background:rgba(29,95,168,0.15);color:var(--accent);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">×</button>
       </div>`).join("");
   }
 
@@ -371,11 +413,12 @@
     if (!date)  { alert("Vyplňte dátum."); return; }
     if (!shift) { alert("Vyberte hliadku."); return; }
     if (!window._startWorkers?.length) { alert("Pridajte aspoň jedného pracovníka."); return; }
-
+    const btn = document.getElementById("start-btn");
+    btn.disabled = true; btn.textContent = "Ukladanie...";
     const workers = {};
     window._startWorkers.forEach(w => { workers[w] = emptyWorkerCounts(); });
-
-    await push(dbRef, { date, shift, ts: Date.now(), active: true, workers });
+    await push(dbRef, { date, shift, ts: Date.now(), status: "active", workers });
+    btn.disabled = false; btn.textContent = "Začať hliadku";
   };
 
   // ── ACTIVE SHIFT ──
@@ -386,30 +429,14 @@
     const total = shiftTotal(s);
     const wCount = keys.length;
 
-    // Header
-    const header = `
-      <div class="shift-header">
-        <div class="shift-badge">${s.shift||"?"}</div>
-        <div class="shift-info">
-          <div class="shift-title">Hliadka ${s.shift||"?"} · ${s.date||""}</div>
-          <div class="shift-meta">${wCount} pracovník${wCount===1?"":wCount<5?"íci":"ov"} · aktívna</div>
-        </div>
-        <div class="shift-total">${total}</div>
-      </div>`;
-
-    // Add worker row
+    // Worker modal options
     const usedWorkers = new Set(keys);
     const availWorkers = WORKERS.filter(w=>!usedWorkers.has(w));
-    const addWorkerRow = `
-      <div class="card" style="padding:12px 14px">
-        <div class="add-worker-row">
-          <select id="worker-select-active">
-            <option value="">+ Pridať pracovníka</option>
-            ${availWorkers.map(w=>`<option value="${w}">${w}</option>`).join("")}
-          </select>
-          <button class="btn-add" onclick="addActiveWorker()">Pridať</button>
-        </div>
-      </div>`;
+    const modalSel = document.getElementById("modal-worker-select");
+    if (modalSel) {
+      modalSel.innerHTML = `<option value="">— Vybrať pracovníka —</option>` +
+        availWorkers.map(w=>`<option value="${w}">${w}</option>`).join("");
+    }
 
     // Matrix grid
     let grid = "";
@@ -444,34 +471,56 @@
         ${keys.map(w=>`<td class="act-cell total-td">${workerTotal(workers[w]||{})}</td>`).join("")}
       </tr>`;
 
-      grid = `
-        <div class="act-grid-wrap">
-          <table class="act-grid">
-            <thead><tr>
-              <th class="act-name-th">Aktivita</th>
-              ${workerCols}
-            </tr></thead>
-            <tbody>${actRows}</tbody>
-            <tfoot>${totalRow}</tfoot>
-          </table>
-        </div>`;
+      grid = `<div class="act-grid-wrap">
+        <table class="act-grid">
+          <thead><tr>
+            <th class="act-name-th">Aktivita</th>
+            ${workerCols}
+          </tr></thead>
+          <tbody>${actRows}</tbody>
+          <tfoot>${totalRow}</tfoot>
+        </table>
+      </div>`;
     } else {
-      grid = `<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:13px;background:var(--surface);border-radius:var(--radius-lg);border:.5px solid var(--border);margin-bottom:10px">Pridajte pracovníkov hliadky</div>`;
+      grid = `<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:13px">Pridajte pracovníkov hliadky pomocou tlačidla nižšie.</div>`;
     }
 
-    const closeBtn = `<button class="btn-danger" onclick="closeHliadka()">Ukončiť hliadku</button>`;
-
-    el.innerHTML = header + addWorkerRow + grid + closeBtn;
+    el.innerHTML = `
+      <div class="active-service-card">
+        <div class="active-service-header">
+          <div class="active-worker-chip">${s.shift||"?"}</div>
+          <div class="active-service-info">
+            <div class="label">Aktívna hliadka</div>
+            <div class="title">Hliadka ${s.shift||"?"} · ${s.date||""}</div>
+            <div class="since">${wCount} pracovník${wCount===1?"":wCount<5?"íci":"ov"} · ${total} aktivít</div>
+          </div>
+        </div>
+        ${grid}
+        <div class="active-footer">
+          <button class="add-worker-btn" onclick="openWorkerModal()">+ Pridať pracovníka</button>
+          <button class="end-service-btn" onclick="closeHliadka()">Ukončiť hliadku</button>
+        </div>
+      </div>`;
   }
 
-  // ── ACTIVE SHIFT ACTIONS ──
+  // ── WORKER MODAL ──
+  window.openWorkerModal = function() {
+    const usedWorkers = new Set(Object.keys(allData[activeId]?.workers||{}));
+    const availWorkers = WORKERS.filter(w=>!usedWorkers.has(w));
+    document.getElementById("modal-worker-select").innerHTML =
+      `<option value="">— Vybrať pracovníka —</option>` +
+      availWorkers.map(w=>`<option value="${w}">${w}</option>`).join("");
+    document.getElementById("modal-worker").classList.remove("hidden");
+  };
+  window.closeWorkerModal = () => document.getElementById("modal-worker").classList.add("hidden");
+
   window.addActiveWorker = async function() {
-    const sel = document.getElementById("worker-select-active");
+    const sel = document.getElementById("modal-worker-select");
     const w = sel.value;
     if (!w || !activeId) return;
-    // Optimistic
     if (!allData[activeId].workers) allData[activeId].workers = {};
     allData[activeId].workers[w] = emptyWorkerCounts();
+    closeWorkerModal();
     renderHliadka();
     await set(ref(db, `aktivity/zaznamy/${activeId}/workers/${w}`), emptyWorkerCounts());
   };
@@ -479,7 +528,6 @@
   window.removeActiveWorker = async function(w) {
     if (!activeId) return;
     if (!confirm(`Odstrániť pracovníka ${w} z hliadky?`)) return;
-    // Optimistic
     delete allData[activeId].workers[w];
     renderHliadka();
     await remove(ref(db, `aktivity/zaznamy/${activeId}/workers/${w}`));
@@ -489,7 +537,6 @@
     if (!activeId) return;
     const current = (allData[activeId]?.workers?.[w]?.[actId])||0;
     const next = current + 1;
-    // Optimistic
     allData[activeId].workers[w][actId] = next;
     renderHliadka();
     await set(ref(db, `aktivity/zaznamy/${activeId}/workers/${w}/${actId}`), next);
@@ -500,7 +547,6 @@
     const current = (allData[activeId]?.workers?.[w]?.[actId])||0;
     if (current <= 0) return;
     const next = current - 1;
-    // Optimistic
     allData[activeId].workers[w][actId] = next;
     renderHliadka();
     await set(ref(db, `aktivity/zaznamy/${activeId}/workers/${w}/${actId}`), next);
@@ -509,7 +555,7 @@
   window.closeHliadka = async function() {
     if (!activeId) return;
     if (!confirm("Ukončiť aktívnu hliadku?")) return;
-    await update(ref(db, `aktivity/zaznamy/${activeId}`), { active: false });
+    await update(ref(db, `aktivity/zaznamy/${activeId}`), { status: "done" });
   };
 
   // ── ZÁZNAMY ──
@@ -526,19 +572,19 @@
       return;
     }
     el.innerHTML = entries.map(z => {
+      const isActive = z.status === "active";
       const total  = shiftTotal(z);
       const wCount = Object.keys(z.workers||{}).length;
       const isOpen = openZazId === z.id;
-      const isLive = z.active === true;
       return `
       <div class="zaz-card">
         <div class="zaz-header" onclick="toggleZaz('${z.id}')">
-          <div class="zaz-chip${isLive?" live":""}">${z.shift||"?"}</div>
+          <div class="zaz-chip${isActive?" active":""}">${z.shift||"?"}</div>
           <div class="zaz-info">
-            <div class="zaz-title">Hliadka ${z.shift||"?"} · ${z.date||""}${isLive?' <span style="font-size:11px;color:var(--green);font-weight:600">● LIVE</span>':""}</div>
+            <div class="zaz-title">Hliadka ${z.shift||"?"} · ${z.date||""}</div>
             <div class="zaz-meta">${wCount} pracovník${wCount===1?"":wCount<5?"íci":"ov"} · ${total} aktivít</div>
           </div>
-          <div class="zaz-total">${total}</div>
+          <span class="svc-badge ${isActive?"active":"done"}">${isActive?"Aktívna":"Ukončená"}</span>
         </div>
         <div class="zaz-body${isOpen?" open":""}">
           ${Object.entries(z.workers||{}).sort((a,b)=>workerTotal(b[1])-workerTotal(a[1])).map(([w,counts])=>`
@@ -576,7 +622,7 @@
                  : statPeriod==="month" ? new Date(now-30*86400000).toISOString().split("T")[0]
                  : "0000-00-00";
 
-    const entries = Object.values(allData).filter(z=>(z.date||"")>=cutoff && !z.active);
+    const entries = Object.values(allData).filter(z=>(z.date||"")>=cutoff && z.status!=="active");
 
     const totalSessions = entries.length;
     const totalActs     = entries.reduce((s,z)=>s+shiftTotal(z),0);
@@ -596,7 +642,7 @@
     const maxA = Math.max(...Object.values(actMap), 1);
 
     const shiftColors = {"A":"#1d5fa8","B":"#2d6a4f","C":"#b45309","D":"#c0392b"};
-    const shiftData   = ["A","B","C","D"].map(sh=>({
+    const shiftData = ["A","B","C","D"].map(sh=>({
       sh,
       acts: entries.filter(z=>z.shift===sh).reduce((s,z)=>s+shiftTotal(z),0),
       sess: entries.filter(z=>z.shift===sh).length
@@ -629,7 +675,7 @@
             <div class="br-wrap"><div class="br-bar" style="width:${Math.round(acts/maxSh*100)}%;background:${shiftColors[sh]}"></div></div>
             <div class="br-count">
               <span style="font-weight:700">${acts}</span> <span style="font-size:11px;color:var(--muted)">aktiv.</span>
-              &nbsp;·&nbsp; <span style="font-size:11px;color:var(--muted)">${sess} záz.</span>
+              &nbsp;·&nbsp;<span style="font-size:11px;color:var(--muted)">${sess} záz.</span>
             </div>
           </div>`).join("")}
       </div>
