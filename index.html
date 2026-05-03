@@ -276,14 +276,16 @@
 
   // ── CONSTANTS ──
   const ACTIVITIES = [
-    { id: "preverenie",   label: "Preverenie osoby",    icon: "🔍" },
-    { id: "pomoc",        label: "Pomoc občanovi",       icon: "🤝" },
-    { id: "telefon159",   label: "Telefonát 159",        icon: "📞" },
-    { id: "predvedenie",  label: "Predvedenie osoby",    icon: "👮" },
-    { id: "pokuta",       label: "Bloková pokuta",        icon: "📋" },
-    { id: "priestupok",   label: "Priestupkové konanie", icon: "⚖️" },
-    { id: "hliadkovanie", label: "Hliadkovanie",         icon: "🚶" },
-    { id: "ine",          label: "Iné",                  icon: "📌" },
+    { id: "pomoc",        label: "Pomoc občanom",                    icon: "🤝" },
+    { id: "priestupok",   label: "Priestupky proti VP",              icon: "⚖️" },
+    { id: "deti_alkohol", label: "Deti pod vplyvom alkoholu",        icon: "🍺" },
+    { id: "kamera",       label: "Kamerové záznamy",                 icon: "📷" },
+    { id: "hliadkovanie", label: "Hliadkovacia činnosť",             icon: "🚶" },
+    { id: "zavady",       label: "Závady v meste",                   icon: "⚠️" },
+    { id: "odchyt",       label: "Odchyt psov",                      icon: "🐾" },
+    { id: "preverenie",   label: "Preverenie",                       icon: "🔍" },
+    { id: "trestne",      label: "Trestné činy",                     icon: "🚨" },
+    { id: "oznamenia",    label: "Oznámenia na 159 a pevnú linku",   icon: "📞" },
   ];
   const WORKERS = Array.from({length:39},(_,i)=>(i+1).toString().padStart(3,"0"));
 
