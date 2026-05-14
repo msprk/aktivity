@@ -252,22 +252,14 @@
   </div>
 </nav>
 
+<script src="https://msprk.github.io/firebase-config.js"></script>
 <script type="module">
   import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, onValue, push, set, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey:            "AIzaSyDOYPIXjbW3mrFpospLjTbt6ui4I318sg8",
-    authDomain:        "msprk-app.firebaseapp.com",
-    databaseURL:       "https://msprk-app-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId:         "msprk-app",
-    storageBucket:     "msprk-app.firebasestorage.app",
-    messagingSenderId: "544350754193",
-    appId:             "1:544350754193:web:acb050a43126437790f630"
-  };
 
-  const app  = initializeApp(firebaseConfig);
+  const app  = initializeApp(window.FIREBASE_CONFIG);
   const auth = getAuth(app);
   onAuthStateChanged(auth, user => { if (!user) window.location.href = "/"; });
 
@@ -308,6 +300,21 @@
   function shiftTotal(z) { return Object.values(z.workers||{}).reduce((s,w)=>s+workerTotal(w),0); }
 
   // ── FIREBASE ──
+
+  function escapeHtml(s) {
+    if (s == null) return "";
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function showToast(msg) {
+    const t = document.createElement("div");
+    t.style.cssText = "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:10px 20px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;z-index:100;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:90vw;text-align:center;pointer-events:none;transition:opacity .3s";
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.style.opacity = "0", 3500);
+    setTimeout(() => t.remove(), 3800);
+  }
+
   onValue(dbRef, snap => {
     allData = snap.val() || {};
     setStatus(true);
@@ -412,9 +419,9 @@
   window.startHliadka = async function() {
     const date  = document.getElementById("f-date")?.value;
     const shift = document.getElementById("f-shift")?.value;
-    if (!date)  { alert("Vyplňte dátum."); return; }
-    if (!shift) { alert("Vyberte hliadku."); return; }
-    if (!window._startWorkers?.length) { alert("Pridajte aspoň jedného pracovníka."); return; }
+    if (!date)  { showToast("Vyplňte dátum."); return; }
+    if (!shift) { showToast("Vyberte hliadku."); return; }
+    if (!window._startWorkers?.length) { showToast("Pridajte aspoň jedného pracovníka."); return; }
     const btn = document.getElementById("start-btn");
     btn.disabled = true; btn.textContent = "Ukladanie...";
     const workers = {};
